@@ -1,3 +1,5 @@
+import './widget/chart.dart';
+
 import './widget/transaction_list.dart';
 
 import './widget/new_transactions.dart';
@@ -11,26 +13,25 @@ void main() {
     MaterialApp(
       home: MyApp(),
       theme: ThemeData(
-        primarySwatch: Colors.purple,
-        accentColor: Colors.amber,
-        fontFamily: 'Quicksand',
-        textTheme: ThemeData.light().textTheme.copyWith(
-              headline6: TextStyle(
-                fontFamily: 'OpenSans',
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-        appBarTheme: AppBarTheme(
-          textTheme: ThemeData.light().textTheme.copyWith(
-                headline6: TextStyle(
-                    fontFamily: 'OpenSans',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-        ),
-      ),
+          primarySwatch: Colors.purple,
+          accentColor: Colors.amber,
+          fontFamily: 'Quick',
+          // textTheme: ThemeData.light().textTheme.copyWith(
+          //       // subtitle1: TextStyle(
+          //       //   fontFamily: 'OpenSans',
+          //       //   fontWeight: FontWeight.bold,
+          //       //   fontSize: 18,
+          //       // ),
+          //   // button: TextStyle(
+          //   //   color: Colors.white
+          //   // ),
+          //     ),
+          appBarTheme: AppBarTheme(
+              titleTextStyle: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ))),
     ),
   );
 }
@@ -61,6 +62,18 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  List<Transaction> get _recentTransactions {
+    return transactions
+        .where(
+          (element) => element.date.isAfter(
+            DateTime.now().subtract(
+              Duration(days: 7),
+            ),
+          ),
+        )
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,13 +88,7 @@ class _MyAppState extends State<MyApp> {
       ),
       body: Column(
         children: [
-          Card(
-            child: Container(
-              width: double.infinity,
-              color: Colors.green,
-              child: Text('CHART'),
-            ),
-          ),
+          Chart(_recentTransactions),
           TransactionList(transactions),
         ],
       ),
