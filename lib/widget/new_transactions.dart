@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -18,32 +17,34 @@ class _AddTransactionsState extends State<AddTransactions> {
   DateTime _selectedDate;
 
   void _submittedData() {
+    if (_amountController.text.isEmpty) {
+      return;
+    }
     final enteredAmount = double.parse(_amountController.text);
     final enteredName = _nameController.text;
 
-    if (enteredName.isEmpty || enteredAmount <= 0) {
+    if (enteredName.isEmpty || enteredAmount <= 0 || _selectedDate == null) {
       return;
     }
-    widget.addTransaction(enteredName, enteredAmount);
+    widget.addTransaction(enteredName, enteredAmount, _selectedDate);
 
     Navigator.of(context).pop();
   }
 
   void _presentDatePicker() async {
-    DateTime pickedDate;
     await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2021),
       lastDate: DateTime.now(),
-    );
-    if (pickedDate == null) {
-      return;
-    }
-    setState(() {
-      _selectedDate = pickedDate;
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+      setState(() {
+        _selectedDate = pickedDate;
+      });
     });
-
   }
 
   @override
@@ -85,7 +86,7 @@ class _AddTransactionsState extends State<AddTransactions> {
                 TextButton(
                   onPressed: _presentDatePicker,
                   child: Text(
-                    'Chose Date',
+                    'Choose Date',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),

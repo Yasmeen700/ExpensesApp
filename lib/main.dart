@@ -13,25 +13,27 @@ void main() {
     MaterialApp(
       home: MyApp(),
       theme: ThemeData(
-          primarySwatch: Colors.purple,
-          accentColor: Colors.amber,
-          fontFamily: 'Quick',
-          // textTheme: ThemeData.light().textTheme.copyWith(
-          //       // subtitle1: TextStyle(
-          //       //   fontFamily: 'OpenSans',
-          //       //   fontWeight: FontWeight.bold,
-          //       //   fontSize: 18,
-          //       // ),
-          //   // button: TextStyle(
-          //   //   color: Colors.white
-          //   // ),
-          //     ),
-          appBarTheme: AppBarTheme(
-              titleTextStyle: TextStyle(
+        primarySwatch: Colors.purple,
+        accentColor: Colors.amber,
+        fontFamily: 'Quick',
+        // textTheme: ThemeData.light().textTheme.copyWith(
+        //       // subtitle1: TextStyle(
+        //       //   fontFamily: 'OpenSans',
+        //       //   fontWeight: FontWeight.bold,
+        //       //   fontSize: 18,
+        //       // ),
+        //   // button: TextStyle(
+        //   //   color: Colors.white
+        //   // ),
+        //     ),
+        appBarTheme: AppBarTheme(
+          titleTextStyle: TextStyle(
             fontFamily: 'OpenSans',
             fontSize: 20,
             fontWeight: FontWeight.bold,
-          ))),
+          ),
+        ),
+      ),
     ),
   );
 }
@@ -42,12 +44,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final List<Transaction> transactions = [];
+  final List<Transaction> _transactions = [];
 
-  void _addTransaction(String name, double amount) {
+  void _addTransaction(String name, double amount, DateTime chosenDate) {
     setState(() {
-      transactions
-          .add(Transaction(amount: amount, date: DateTime.now(), name: name));
+      _transactions.add(Transaction(
+          amount: amount,
+          date: chosenDate,
+          name: name,
+          id: DateTime.now().toString()));
     });
   }
 
@@ -63,7 +68,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   List<Transaction> get _recentTransactions {
-    return transactions
+    return _transactions
         .where(
           (element) => element.date.isAfter(
             DateTime.now().subtract(
@@ -72,6 +77,12 @@ class _MyAppState extends State<MyApp> {
           ),
         )
         .toList();
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _transactions.removeWhere((element) => element.id == id);
+    });
   }
 
   @override
@@ -89,7 +100,7 @@ class _MyAppState extends State<MyApp> {
       body: Column(
         children: [
           Chart(_recentTransactions),
-          TransactionList(transactions),
+          TransactionList(_transactions, _deleteTransaction),
         ],
       ),
       floatingActionButton: FloatingActionButton(
