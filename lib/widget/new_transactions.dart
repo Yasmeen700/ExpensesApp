@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:universal_io/io.dart';
 class AddTransactions extends StatefulWidget {
   final Function addTransaction;
 
@@ -49,55 +50,70 @@ class _AddTransactionsState extends State<AddTransactions> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          TextField(
-            controller: _nameController,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              labelText: 'Name',
-            ),
-            onSubmitted: (_) => _submittedData,
-          ),
-          TextField(
-            controller: _amountController,
-            keyboardType: TextInputType.number,
-            onSubmitted: (_) => _submittedData,
-            decoration: InputDecoration(
-              labelText: 'Amount',
-            ),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Container(
-            height: 70,
-            child: Row(
-              children: [
-                Text(_selectedDate == null
-                    ? 'No Date Chosen'
-                    : DateFormat.yMd().format(_selectedDate)),
-                SizedBox(
-                  width: 10,
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Container(
+          padding:  EdgeInsets.only(
+              top: 10,
+              left: 10,
+              right: 10,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+
+              TextField(
+                controller: _nameController,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  labelText: 'Name',
                 ),
-                TextButton(
-                  onPressed: _presentDatePicker,
-                  child: Text(
-                    'Choose Date',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+                onSubmitted: (_) => _submittedData,
+              ),
+              TextField(
+                controller: _amountController,
+                keyboardType: TextInputType.number,
+                onSubmitted: (_) => _submittedData,
+                decoration: InputDecoration(
+                  labelText: 'Amount',
                 ),
-              ],
-            ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Container(
+                height: 70,
+                child: Row(
+                  children: [
+                    Text(_selectedDate == null
+                        ? 'No Date Chosen'
+                        : DateFormat.yMd().format(_selectedDate)),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Platform.isIOS?
+                        CupertinoButton(child: Text(
+                          'Choose Date',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ), onPressed: _presentDatePicker)
+                        :TextButton(
+                      onPressed: _presentDatePicker,
+                      child: Text(
+                        'Choose Date',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: _submittedData,
+                child: Text('Add Transaction'),
+              ),
+            ],
           ),
-          ElevatedButton(
-            onPressed: _submittedData,
-            child: Text('Add Transaction'),
-          ),
-        ],
+        ),
       ),
     );
   }

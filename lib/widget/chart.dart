@@ -14,7 +14,7 @@ class Chart extends StatelessWidget {
     return List.generate(7, (index) {
 
         final weekDay = DateTime.now().subtract(
-          Duration(days: index+3),
+          Duration(days: index),
         );
 
 
