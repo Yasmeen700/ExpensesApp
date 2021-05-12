@@ -1,7 +1,8 @@
+import '../widget/adaptive_elevated_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:universal_io/io.dart';
+
 class AddTransactions extends StatefulWidget {
   final Function addTransaction;
 
@@ -54,7 +55,7 @@ class _AddTransactionsState extends State<AddTransactions> {
       child: Card(
         elevation: 5,
         child: Container(
-          padding:  EdgeInsets.only(
+          padding: EdgeInsets.only(
               top: 10,
               left: 10,
               right: 10,
@@ -62,7 +63,6 @@ class _AddTransactionsState extends State<AddTransactions> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-
               TextField(
                 controller: _nameController,
                 keyboardType: TextInputType.text,
@@ -89,21 +89,10 @@ class _AddTransactionsState extends State<AddTransactions> {
                     Text(_selectedDate == null
                         ? 'No Date Chosen'
                         : DateFormat.yMd().format(_selectedDate)),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
-                    Platform.isIOS?
-                        CupertinoButton(child: Text(
-                          'Choose Date',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ), onPressed: _presentDatePicker)
-                        :TextButton(
-                      onPressed: _presentDatePicker,
-                      child: Text(
-                        'Choose Date',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                    AdaptiveElevatedButton(_presentDatePicker,'Choose Date'),
                   ],
                 ),
               ),
